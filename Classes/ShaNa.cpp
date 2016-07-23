@@ -52,8 +52,26 @@ void ShaNa::centerViewOfPoint(Vec2 pos) {
 
 	float mapWidth = map->getMapSize().width*map->getTileSize().width;
 	float mapHeight = map->getMapSize().height*map->getTileSize().height;
+	Vec2 dispos = Vec2::ZERO;
 
-	float x = MAX(getPositionX(), visibleSize.width / 2);
+	if (pos.x < visibleSize.width / 2){
+		dispos.x = 0;
+	}
+	else if (pos.x > visibleSize.width / 2 && pos.x < (mapWidth - visibleSize.width / 2)){
+		dispos.x = -(pos.x - visibleSize.width / 2);
+	}
+	else {
+		dispos.x = -(mapWidth - visibleSize.width);
+	}
+
+	if (pos.y > visibleSize.height / 2){
+		dispos.y = visibleSize.height / 2;
+	}
+	else if (pos.y < 0){
+		dispos.y = 0;
+	}
+
+	/*float x = MAX(getPositionX(), visibleSize.width / 2);
 	float y = MAX(getPositionY(), visibleSize.height / 2);
 
 	x = MIN(x, mapWidth - visibleSize.width / 2);
@@ -61,9 +79,9 @@ void ShaNa::centerViewOfPoint(Vec2 pos) {
 
 	Vec2 actualPos = Vec2(x, y);
 	Vec2 centerPos = Vec2(visibleSize / 2);
-	Vec2 disPos = centerPos - actualPos;
+	Vec2 disPos = centerPos - actualPos;*/
 
-	getParent()->setPosition(disPos);
+	getParent()->setPosition(dispos);
 }
 
 void ShaNa::updateSelf(){
@@ -79,12 +97,12 @@ void ShaNa::updateSelf(){
 		float mapHeight = GlobalCtrl::getInstance()->tilemap->getTileSize().height * 4;
 		float mapWidth = GlobalCtrl::getInstance()->tilemap->getContentSize().width;
 
-		/*if (expectPos.x - width / 2 < 0 || expectPos.x + width / 2 > mapWidth) {
+		if (expectPos.x - width / 2 < 0 || expectPos.x + width / 2 > mapWidth) {
 			actualPos.x = curPos.x;
 		}
 		if (expectPos.y - height / 2 < 0 || expectPos.y - height / 2 > mapHeight) {
 			actualPos.y = curPos.y;
-		}*/
+		}
 		setPosition(actualPos);
 
 		setLocalZOrder(visibleSize.height - getPositionY());
